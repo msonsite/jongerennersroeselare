@@ -12,6 +12,22 @@ st.markdown(f"""
 <h2 style='color:#000000;'>Seizoen {current_year}</h2>
 """, unsafe_allow_html=True)
 
+st.markdown("---")
+st.markdown("\n\nDownload hieronder de input template indien nodig.")
+
+try:
+    with open("standardized_template.xlsx", "rb") as template_file:
+        st.download_button(
+            label="Download standaard Excel-template",
+            data=template_file,
+            file_name="standardized_template.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+except FileNotFoundError:
+    pass
+
+st.markdown("---")
+
 uploaded_file = st.file_uploader("Upload het Excel bestand:", type=["xlsx"])
 
 if uploaded_file:
@@ -37,6 +53,11 @@ if uploaded_file:
     df.dropna(axis=1, how='all', inplace=True)
 
     riders = df.index.tolist()
+
+# --- Vergelijken van verschillende renners ---
+    st.markdown("---")
+    st.subheader("Vergelijk de prestaties van één of meerdere renners.")
+
     selected_riders = st.multiselect("Selecteer renners om te vergelijken", riders, default=[riders[0]] if riders else [])
 
     if selected_riders:
@@ -62,20 +83,39 @@ if uploaded_file:
         )
 
         st.plotly_chart(fig)
+
+# --- Extra wedstrijd-filter en vergelijkende grafiek ---
+        st.markdown("---")
+        st.subheader("Vergelijk de teamprestaties in één specifieke wedstrijd.")
+
+        valid_races = [col for col in df.columns if pd.notna(col)]
+        selected_race = st.selectbox("Selecteer een koers om te vergelijken", options=valid_races)
+
+        if selected_race:
+            race_column = df[selected_race].dropna()
+            sorted_race = race_column.sort_values()
+
+            fig_bar = go.Figure()
+            fig_bar.add_trace(go.Bar(
+                x=sorted_race.index,
+                y=sorted_race.values,
+                text=sorted_race.values,
+                textposition='auto',
+                marker_color='#fb5d01'
+            ))
+
+            fig_bar.update_layout(
+                title=f"Uitslagen voor {selected_race}",
+                xaxis_title="Renner",
+                yaxis_title="Uitslag",
+                yaxis=dict(autorange="reversed"),
+                height=500
+            )
+
+            st.plotly_chart(fig_bar)
+
+
     else:
         st.info("Selecteer minstens een renner om de grafiek te zien.")
 else:
     st.info("Upload de Excel template die een ingevuld uitslagen tabblad bevat.")
-
-st.markdown("\n\nDownload hieronder de input template indien nodig.")
-
-try:
-    with open("standardized_template.xlsx", "rb") as template_file:
-        st.download_button(
-            label="Download standaard Excel-template",
-            data=template_file,
-            file_name="standardized_template.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-except FileNotFoundError:
-    pass
