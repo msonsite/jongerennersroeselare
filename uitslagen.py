@@ -1,12 +1,15 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objs as go
+from datetime import datetime
 
-st.image("https://jongerennersroeselare.be/assets/images/logo_jrr.png", width=150)
+st.image("https://jongerennersroeselare.be/assets/images/logo_jrr.png", width=200)
 
-st.markdown("""
+current_year = datetime.now().year
+
+st.markdown(f"""
 <h1 style='color:#fb5d01;'>Uitslagen Men Juniors</h1>
-<h2 style='color:#0000000;'>Seizoen 2025</h2>
+<h2 style='color:#ffffff;'>Seizoen {current_year}</h2>
 """, unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
