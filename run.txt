@@ -1,3 +1,2 @@
-python3 -m streamlit run uitslagen.py
-
-#run the above in terminal
+#run in terminal
+python3 -m streamlit run Home.py
