@@ -9,8 +9,19 @@ current_year = datetime.now().year
 
 st.markdown(f"""
 <h1 style='color:#fb5d01;'>Uitslagen Men Juniors</h1>
-<h2 style='color:#ffffff;'>Seizoen {current_year}</h2>
+<h2 style='color:#000000;'>Seizoen {current_year}</h2>
 """, unsafe_allow_html=True)
+
+try:
+    with open("standardized_template.xlsx", "rb") as template_file:
+        st.download_button(
+            label="Download standaard Excel-template",
+            data=template_file,
+            file_name="standardized_template.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+except FileNotFoundError:
+    pass
 
 uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
 

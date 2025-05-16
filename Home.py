@@ -62,7 +62,7 @@ header, footer, .css-18e3th9 {
 """, unsafe_allow_html=True)
 
 with st.container():
-    st.markdown("<h1>Wielrennen Performance</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color:#fb5d01;'>Wielrennen Performance</h1>", unsafe_allow_html=True)
     st.markdown("<h2>Focus. Analyse. Winnen.</h2>", unsafe_allow_html=True)
 
     st.image("https://jongerennersroeselare.be/assets/images/logo_jrr.png", width=220)
@@ -83,3 +83,7 @@ with st.container():
     </ul>
     </p>
     """, unsafe_allow_html=True)
+
+with st.container():
+    st.markdown("""<hr style='border:1px solid #ddd; margin-top: 50px; margin-bottom: 10px;'>""", unsafe_allow_html=True)
+    st.markdown("💻 Developed by **Sander de Lobel**", unsafe_allow_html=True)
