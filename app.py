@@ -9,7 +9,6 @@ st.markdown("""
 <h2 style='color:#0000000;'>Seizoen 2025</h2>
 """, unsafe_allow_html=True)
 
-
 uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
 
 if uploaded_file:
@@ -17,18 +16,17 @@ if uploaded_file:
 
     race_dates = raw_df.iloc[1, 3:].tolist()
 
-    df = raw_df.iloc[2:, [1] + list(range(3, raw_df.shape[1]))]
+    names = raw_df.iloc[2:, 1].tolist()
+    results = raw_df.iloc[2:, 3:].reset_index(drop=True)
 
-    df.columns = ['NAME'] + race_dates
+    df = pd.DataFrame(results.values, columns=race_dates)
+
+    df.insert(0, 'NAME', names)
     df.set_index('NAME', inplace=True)
 
     df = df.astype(str)
-
     df = df.replace(to_replace=["", "nan", "NaN"], value=pd.NA)
-
-    dnf_mask = df == "DNF"
-
-    df = df.mask(dnf_mask, pd.NA)
+    df = df.mask(df == "DNF", pd.NA)
 
     df = df.apply(pd.to_numeric, errors='coerce')
 
@@ -36,7 +34,7 @@ if uploaded_file:
     df.dropna(axis=1, how='all', inplace=True)
 
     riders = df.index.tolist()
-    selected_riders = st.multiselect("Selecteer renners om te vergelijken", riders, default=[riders[0]])
+    selected_riders = st.multiselect("Selecteer renners om te vergelijken", riders, default=[riders[0]] if riders else [])
 
     if selected_riders:
         fig = go.Figure()
@@ -50,7 +48,7 @@ if uploaded_file:
                 name=rider,
                 connectgaps=True,
                 line_shape='spline'
-        ))
+            ))
 
         fig.update_layout(
             title="Resultaten over de tijd",
@@ -61,7 +59,6 @@ if uploaded_file:
         )
 
         st.plotly_chart(fig)
-
     else:
         st.info("Selecteer minstens een renner om de grafiek te zien.")
 else:
