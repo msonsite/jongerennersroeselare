@@ -12,18 +12,7 @@ st.markdown(f"""
 <h2 style='color:#000000;'>Seizoen {current_year}</h2>
 """, unsafe_allow_html=True)
 
-try:
-    with open("standardized_template.xlsx", "rb") as template_file:
-        st.download_button(
-            label="Download standaard Excel-template",
-            data=template_file,
-            file_name="standardized_template.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-except FileNotFoundError:
-    pass
-
-uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
+uploaded_file = st.file_uploader("Upload het Excel bestand:", type=["xlsx"])
 
 if uploaded_file:
     raw_df = pd.read_excel(uploaded_file, sheet_name="Uitslagen", header=None)
@@ -76,4 +65,17 @@ if uploaded_file:
     else:
         st.info("Selecteer minstens een renner om de grafiek te zien.")
 else:
-    st.info("Upload een Excel file die een uitslagen tabblad bevat.")
+    st.info("Upload de Excel template die een ingevuld uitslagen tabblad bevat.")
+
+st.markdown("\n\nDownload hieronder de input template indien nodig.")
+
+try:
+    with open("standardized_template.xlsx", "rb") as template_file:
+        st.download_button(
+            label="Download standaard Excel-template",
+            data=template_file,
+            file_name="standardized_template.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+except FileNotFoundError:
+    pass
