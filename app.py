@@ -15,9 +15,9 @@ uploaded_file = st.file_uploader("Upload Excel file", type=["xlsx"])
 if uploaded_file:
     raw_df = pd.read_excel(uploaded_file, sheet_name="Uitslagen", header=None)
 
-    race_dates = raw_df.iloc[1, 1:].tolist()
+    race_dates = raw_df.iloc[1, 3:].tolist()
 
-    df = raw_df.iloc[2:, :]
+    df = raw_df.iloc[2:, [1] + list(range(3, raw_df.shape[1]))]
 
     df.columns = ['NAME'] + race_dates
     df.set_index('NAME', inplace=True)
