@@ -83,11 +83,3 @@ with st.container():
     </ul>
     </p>
     """, unsafe_allow_html=True)
-
-st.markdown("""
-<footer>
-    Gemaakt door Sander de Lobel | Performance Analyst | 2025 &nbsp;&nbsp;&nbsp;
-    <a href="mailto:sanderdelobel@outlook.com">📧 Contact</a> &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-    <a href="https://www.linkedin.com/in/sanderdelobel/" target="_blank">💻 LinkedIn</a>
-</footer>
-""", unsafe_allow_html=True)
