@@ -90,7 +90,7 @@ if uploaded_file is not None:
 
         window_length = st.slider(
             "Hoe vloeiend de lijn is (meer = gladder)",
-            5, 501, 61, step=2,
+            5, 501, 101, step=2,
             help="Hoe sterk het hoogteprofiel wordt gladgestreken. Grotere waarde betekent een zachtere, vloeiendere lijn."
         )
 
