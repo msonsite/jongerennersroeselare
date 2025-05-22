@@ -123,7 +123,7 @@ if uploaded_file is not None:
             color = st.sidebar.color_picker(f"Kleur voor '{name}'", default_col)
             kp_colors.append(color)
     else:
-        default_kp_color = st.sidebar.color_picker("Kleur voor keypoints", "#e6194B")
+        default_kp_color = st.sidebar.color_picker("Kleur voor keypoints", "#fb5d01")
         kp_colors = [default_kp_color] * len(kp_names)
 
     keypoints = []
