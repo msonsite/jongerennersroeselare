@@ -190,7 +190,8 @@ if uploaded_file is not None:
             linecolor='rgba(0,0,0,0)',
             title_text=None,
             autorange='reversed' if mirror_profile else True,
-            showgrid=False
+            showgrid=False,
+            textfont=dict(size=20)
         ),
         yaxis=dict(
             showline=False,
