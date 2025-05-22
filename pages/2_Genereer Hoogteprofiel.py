@@ -124,10 +124,18 @@ if uploaded_file is not None:
 
     # Default kleurenpalet voor automatische toewijzing
     default_colors = [
-        "#e6194B", "#3cb44b", "#ffe119", "#4363d8",
-        "#f58231", "#911eb4", "#46f0f0", "#f032e6",
-        "#bcf60c", "#fabebe", "#008080", "#e6beff"
-    ]
+    # Original 12
+    "#e6194B", "#3cb44b", "#ffe119", "#4363d8",
+    "#f58231", "#911eb4", "#46f0f0", "#f032e6",
+    "#bcf60c", "#fabebe", "#008080", "#e6beff",
+    "#9A6324", "#fffac8", "#800000", "#aaffc3",
+    "#808000", "#ffd8b1", "#000075", "#808080",
+    "#ffffff", "#000000", "#5D8AA8", "#FF7F50",
+    "#DE3163", "#9FE2BF", "#40E0D0", "#6495ED",
+    "#CCCCFF", "#B6D7A8", "#F4CCCC", "#FFE599",
+    "#D9EAD3", "#CFE2F3", "#D5A6BD", "#A2C4C9",
+    "#B4A7D6", "#EAD1DC", "#FCE5CD", "#E06666"
+]
 
     if use_custom_colors:
         kp_colors = []
