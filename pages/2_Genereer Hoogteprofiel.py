@@ -166,7 +166,7 @@ if uploaded_file is not None:
     elevs = [kp["elev"] for kp in keypoints]
     min_elev = min(elevs)
     max_elev = max(elevs)
-    offset = (max_elev - min_elev) * 0.03  # Offset = 3% van y-bereik
+    offset = (max_elev - min_elev) * 0.1  # Offset = 3% van y-bereik
 
     # Voeg markers + offset-tekst toe
     for kp in keypoints:
