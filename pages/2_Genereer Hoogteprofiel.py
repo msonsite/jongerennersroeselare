@@ -25,8 +25,10 @@ De gegenereerde afbeelding is geschikt om als overzichtelijk kaartje op bijvoorb
 1. Upload een GPX-bestand van een trainingsrit of wedstrijd.  
 2. Pas kleuren, lijndikte en afmetingen aan naar voorkeur.  
 3. Voeg belangrijke punten toe zoals klim- en sprintlocaties.  
-4. Bekijk het hoogteprofiel met markeringen.  
-5. Download de afbeelding en plak deze bijvoorbeeld op het stuur voor een snel tactisch overzicht.
+4. Bekijk het hoogteprofiel met keypoints.  
+5. Download de afbeelding en plak deze bijvoorbeeld op de bovenbuis voor een snel tactisch overzicht.
+
+---
 """)
 
 
