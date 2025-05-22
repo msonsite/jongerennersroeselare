@@ -68,21 +68,21 @@ if uploaded_file is not None:
         "Hoogte (m)": elevations
     })
 
-    # --- Sidebar: Profiel instellingen (smoothing & detail) ---
+    # --- Profiel instellingen (smoothing & detail) ---
     max_points = st.slider(
             "Hoe gedetailleerd het profiel is (meer = fijner)",
             100, 20000, 10000,
             help="Aantal punten waaruit het hoogteprofiel bestaat. Meer punten betekent meer details."
         )
-    
+    # --- Sidebar slider voor profielinstelling: smoothness --- #
     with st.sidebar.expander("⚙️ Profiel instellingen", expanded=False):
-
         window_length = st.slider(
             "Hoe vloeiend de lijn is (meer = gladder)",
             3, 301, 61, step=2,
             help="Hoe sterk het hoogteprofiel wordt gladgestreken. Grotere waarde betekent een zachtere, vloeiendere lijn."
         )
 
+    # --- Checkbox om profiel te spiegelen (indien renners verticaal kaartje willen) --- #
     mirror_profile = st.checkbox(
         "Profiel spiegelen (0 km rechts)", value=False
     )
