@@ -172,7 +172,7 @@ if uploaded_file is not None:
         ))
         fig.add_trace(go.Scatter(
             x=[kp["km"]],
-            y=[kp["elev"] + 50],
+            y=[kp["elev"] + 100],
             mode='text',
             text=[kp["name"]],
             textfont=dict(size=14, color=kp["color"]),
