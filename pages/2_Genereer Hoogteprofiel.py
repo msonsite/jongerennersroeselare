@@ -11,14 +11,20 @@ st.set_page_config(page_title="Genereer Hoogteprofiel", layout="centered")
 st.title("Genereer Hoogteprofiel")
 
 # --- Uitleg en instructies voor de gebruiker ---
-st.markdown(
-    """
-    **Upload hieronder een GPX-bestand** om een helder en printbaar hoogteprofiel te genereren.  
-    Pas de lijnkleur, dikte en afmetingen aan in de sidebar links.  
-    Voeg eventueel belangrijke punten (klim, sprint, bevoorrading...) toe en download daarna het resultaat als transparante PNG.  
-    Perfect voor rennerskaartjes!
-    """
-)
+st.markdown("""
+### Strategisch doel
+Deze tool is speciaal ontwikkeld voor onze junioren wielerclub om eenvoudig en snel hoogteprofielen te genereren.  
+Zo kunnen renners en coaches beter inzicht krijgen in het parcours en hun race- en trainingsstrategieën verfijnen.
+
+---
+
+### Instructies
+1. Upload een GPX-bestand van een rit of race.  
+2. Pas de kleuren, lijndikte en afmetingen aan naar wens.  
+3. Voeg belangrijke punten toe zoals klim- of sprintlocaties.  
+4. Bekijk het hoogteprofiel en download het als een hoge resolutie afbeelding.  
+5. Gebruik het profiel om je voor te bereiden en te plannen!
+""")
 
 # --- GPX bestand upload veld ---
 uploaded_file = st.file_uploader("Upload een GPX-bestand", type=["gpx"])
