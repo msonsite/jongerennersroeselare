@@ -29,8 +29,6 @@ with st.expander("Instructies", expanded=False):
     4. Voeg belangrijke punten toe zoals klim- en sprintlocaties in het linkerpaneel.  
     5. Bekijk onderaan het custom hoogteprofiel met keypoints.  
     6. Download de afbeelding via de "Download" knop en plak deze bijvoorbeeld op de bovenbuis voor een snel tactisch overzicht.
-
-    ---
     """)
 
 
