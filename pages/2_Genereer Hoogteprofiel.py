@@ -1,16 +1,16 @@
-# --- Importeren van benodigde libraries ---
-import streamlit as st
-import plotly.graph_objects as go
-import gpxpy
-import pandas as pd
-import numpy as np
-from scipy.signal import savgol_filter
+from imports import *
 
-# --- Streamlit pagina configuratie en titel ---
+# --- Pagina config en titel ---
 st.set_page_config(page_title="Genereer Hoogteprofiel", layout="centered")
-st.title("Genereer Hoogteprofiel")
+st.image("https://jongerennersroeselare.be/assets/images/logo_jrr.png", width=200)
+st.markdown(
+    f"""
+    <h1 style='color:#fb5d01;'>Genereer Hoogteprofiel</h1>
+    """,
+    unsafe_allow_html=True,
+)
 
-# --- Uitleg en instructies voor de gebruiker ---
+# --- Uitleg en instructies ---
 with st.expander("ℹ️ Strategisch doel en instructies", expanded=False):
     st.markdown("""
     ### Strategisch doel
@@ -24,18 +24,22 @@ with st.expander("ℹ️ Strategisch doel en instructies", expanded=False):
 
     ### Instructies
     1. Upload een GPX-bestand van een trainingsrit of wedstrijd.  
-    2. Pas kleuren, lijndikte en afmetingen aan naar voorkeur in het *Personaliseer* menu links.
-    3. (Optioneel) Gebruik de schuifbalken in het *Profiel instellingen* menu links om de detailgraad en gladheid van het hoogteprofiel aan te passen.
-    4. Voeg belangrijke punten toe zoals klim- en sprintlocaties in het linkerpaneel.  
-    5. Bekijk onderaan het custom hoogteprofiel met keypoints.  
-    6. Download de afbeelding via de "Download" knop en plak deze bijvoorbeeld op de bovenbuis voor een snel tactisch overzicht.
-    """)
+    2. Pas alle instellingen aan in de sidebar links:
 
+    <ul style="list-style:none; padding-left:0;">
+      <li><span style="font-weight:bold; background:#fb5d01; color:#fff; padding:3px 8px; border-radius:5px;">🎨 Personaliseer</span> — kleur, lijndikte en afmetingen aanpassen</li>
+      <li><span style="font-weight:bold; background:#fb5d01; color:#fff; padding:3px 8px; border-radius:5px;">⚙️ Profiel instellingen</span> — detailgraad en gladheid van het hoogteprofiel instellen</li>
+      <li><span style="font-weight:bold; background:#fb5d01; color:#fff; padding:3px 8px; border-radius:5px;">📍 Keypoints toevoegen</span> — belangrijke punten zoals klim- en sprintlocaties toevoegen</li>
+    </ul>
 
-# --- GPX bestand upload veld ---
+    3. Bekijk het aangepaste hoogteprofiel met keypoints onderaan de pagina.  
+    4. Download de afbeelding en gebruik deze bijvoorbeeld als tactisch overzicht op de fiets.
+    """, unsafe_allow_html=True)
+
+# --- GPX-file upload veld ---
 uploaded_file = st.file_uploader("Upload een GPX-bestand", type=["gpx"])
 
-# --- Sidebar: Personaliseer sectie met kleur, dikte en afmetingen ---
+# --- Sidebar: Personaliseer sectie ---
 with st.sidebar.expander("🎨 Personaliseer", expanded=False):
     color_option = st.selectbox(
         "Kleur opties",
@@ -49,16 +53,17 @@ with st.sidebar.expander("🎨 Personaliseer", expanded=False):
     else:
         line_color = st.color_picker("Kies je kleur", "#fb5d01")
 
-    line_width = st.slider("Lijndikte", 1, 8, 2)
-    cm_width = st.slider("Breedte afbeelding (cm)", 5.0, 30.0, 10.0)
-    cm_height = st.slider("Hoogte afbeelding (cm)", 0.1, 10.0, 1.0)
+    line_width = st.number_input("Lijndikte", min_value=1, max_value=8, value=2, step=1)
+    cm_width = st.number_input("Breedte hoogteprofiel (cm)", min_value=5.0, max_value=30.0, value=10.0, step=0.1)
+    cm_height = st.number_input("Hoogte hoogteprofiel (cm)", min_value=0.1, max_value=20.0, value=1.0, step=0.1)
 
-# --- Berekenen van pixels vanuit centimeters voor printkwaliteit ---
+
+# --- Pixels cm conversie ---
 dpi = 300
 px_width = int((cm_width / 2.54) * dpi)
 px_height = int((cm_height / 2.54) * dpi)
 
-# --- Hoofdlogica: inlezen en verwerken van GPX bestand ---
+# --- Hoofdlogica: verwerken van GPX-file ---
 if uploaded_file is not None:
     gpx = gpxpy.parse(uploaded_file)
     elevations = []
@@ -99,7 +104,7 @@ if uploaded_file is not None:
         "Profiel spiegelen (0 km rechts)", value=False
     )
 
-    # --- Data downsamplen en smoothen met Savitzky-Golay filter ---
+    # --- Data downsamplen en smoothen ---
     step = max(1, len(df) // max_points)
     df_resampled = df.iloc[::step].reset_index(drop=True)
 
@@ -110,48 +115,50 @@ if uploaded_file is not None:
 
     smooth_elev = savgol_filter(df_resampled["Hoogte (m)"], window_length=window_length, polyorder=3)
 
-    # --- Sidebar: Keypoints toevoegen ---
-    st.sidebar.header("📍 Voeg keypoints toe")
-    keypoint_names = st.sidebar.text_area("Keypoint namen (één per lijn)", "GPM 1\nRAV 1\nSPR 1")
-    keypoint_distances = st.sidebar.text_area("Afstanden (in km, evenveel als namen)", "15.3\n42.7\n55.2")
+    # --- Sidebar: keypoints toevoegen ---
+    with st.sidebar.expander("📍 Keypoints toevoegen", expanded=True):
+        st.warning("⚠️ Gebruik een punt (.) als decimaalteken, geen komma (,).")
+        
+        keypoint_names = st.text_area("Keypoint namen (één per lijn)", "GPM 1\nRAV 1\nSPR 1")
+        keypoint_distances = st.text_area("Afstanden (in km, evenveel als namen)", "15.3\n42.7\n55.2")
 
-    # Checkbox voor per-keypoint kleuren
-    use_custom_colors = st.sidebar.checkbox("Per keypoint een eigen kleur?", False)
+        use_custom_colors = st.checkbox("Per keypoint een eigen kleur?", False)
 
-    # Parse namen en afstanden netjes
-    kp_names = [k.strip() for k in keypoint_names.split("\n") if k.strip()]
-    kp_distances = [float(d.strip()) for d in keypoint_distances.split("\n") if d.strip()]
+        kp_names = [k.strip() for k in keypoint_names.split("\n") if k.strip()]
+        try:
+            kp_distances = [float(d.strip()) for d in keypoint_distances.split("\n") if d.strip()]
+        except ValueError:
+            st.error("Zorg dat alle afstanden correcte getallen zijn met een punt als decimaalteken.")
 
-    # Default kleurenpalet voor automatische toewijzing
-    default_colors = [
-        "#e6194B", "#3cb44b", "#ffe119", "#4363d8",
-        "#f58231", "#911eb4", "#46f0f0", "#f032e6",
-        "#bcf60c", "#fabebe", "#008080", "#e6beff"
-    ]
+        default_colors = [
+            "#e6194B", "#3cb44b", "#ffe119", "#4363d8",
+            "#f58231", "#911eb4", "#46f0f0", "#f032e6",
+            "#bcf60c", "#fabebe", "#008080", "#e6beff"
+        ]
 
-    if use_custom_colors:
-        kp_colors = []
-        for i, name in enumerate(kp_names):
-            default_col = default_colors[i % len(default_colors)]
-            color = st.sidebar.color_picker(f"Kleur voor '{name}'", default_col)
-            kp_colors.append(color)
-    else:
-        default_kp_color = st.sidebar.color_picker("Kleur voor keypoints", "#fb5d01")
-        kp_colors = [default_kp_color] * len(kp_names)
+        if use_custom_colors:
+            kp_colors = []
+            for i, name in enumerate(kp_names):
+                default_col = default_colors[i % len(default_colors)]
+                color = st.color_picker(f"Kleur voor '{name}'", default_col)
+                kp_colors.append(color)
+        else:
+            default_kp_color = st.color_picker("Kleur voor keypoints", "#fb5d01")
+            kp_colors = [default_kp_color] * len(kp_names)
 
-    keypoints = []
-    for name, km, color in zip(kp_names, kp_distances, kp_colors):
-        # Interpoleer hoogte op keypoint afstand
-        interpolated_height = np.interp(km, df_resampled["Afstand (km)"], smooth_elev)
-        keypoints.append({"name": name, "km": km, "elev": interpolated_height, "color": color})
+        keypoints = []
+        for name, km, color in zip(kp_names, kp_distances, kp_colors):
+            interpolated_height = np.interp(km, df_resampled["Afstand (km)"], smooth_elev)
+            keypoints.append({"name": name, "km": km, "elev": interpolated_height, "color": color})
 
-    # --- Sidebar: Interval tussen afstandlabels op X-as ---
+
+    # --- Sidebar: interval tussen X-as marks ---
     tick_interval = st.sidebar.slider("Interval afstandlabels (km)", 5, 50, 20)
 
     # --- Plot bouwen met Plotly ---
     fig = go.Figure()
 
-    # Hoofdhoogteprofiel lijn
+    # --- Hoofdhoogteprofiel lijn ---
     fig.add_trace(go.Scatter(
         x=df_resampled["Afstand (km)"],
         y=smooth_elev,
@@ -174,12 +181,12 @@ if uploaded_file is not None:
             textfont=dict(size=14, color=kp["color"])
         ))
 
-    # --- X-as ticks en labels instellen ---
+    # --- X-as ticks en labels ---
     max_dist = df_resampled["Afstand (km)"].max()
     tick_vals = list(np.arange(0, max_dist + tick_interval, tick_interval))
     tick_texts = [f"{int(t)} km" for t in tick_vals]
 
-    # --- Layout aanpassen voor clean look ---
+    # --- Layout aanpassingen ---
     fig.update_layout(
         xaxis=dict(
             tickmode='array',
@@ -209,12 +216,12 @@ if uploaded_file is not None:
         height=px_height
     )
 
-    # --- Resultaat tonen ---
+    # --- Plot tonen ---
     st.subheader("Hoogteprofiel met keypoints")
     st.plotly_chart(fig, use_container_width=False)
 
-    # --- PNG export met transparante achtergrond ---
-    img_bytes = fig.to_image(format="png", width=px_width, height=px_height, scale=1)
+    # --- Transparante PNG export ---
+    img_bytes = fig.to_image(format="png", width=px_width, height=px_height, scale=3)
 
     st.download_button(
         label=f"Download PNG ({cm_width:.1f} × {cm_height:.1f} cm)",
