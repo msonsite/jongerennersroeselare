@@ -176,7 +176,8 @@ if uploaded_file is not None:
             linewidth=0,
             linecolor='rgba(0,0,0,0)',
             title_text=None,
-            autorange='reversed' if mirror_profile else True
+            autorange='reversed' if mirror_profile else True,
+            showgrid=False
         ),
         yaxis=dict(
             showline=False,
@@ -184,7 +185,8 @@ if uploaded_file is not None:
             linecolor='rgba(0,0,0,0)',
             title_text=None,
             zeroline=False,
-            showticklabels=False
+            showticklabels=False,
+            showgrid=False
         ),
         margin=dict(l=40, r=20, t=20, b=40),
         plot_bgcolor='rgba(0,0,0,0)',
