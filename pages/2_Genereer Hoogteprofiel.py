@@ -13,20 +13,22 @@ st.title("Genereer Hoogteprofiel")
 # --- Uitleg en instructies voor de gebruiker ---
 st.markdown("""
 ### Strategisch doel
-Deze tool is speciaal ontwikkeld om eenvoudig en snel hoogteprofielen te genereren.  
-Zo kunnen renners en coaches beter inzicht krijgen in het parcours en hun race- en trainingsstrategieën verfijnen.
+Deze tool ondersteunt bij het tactisch plannen van wedstrijden en trainingen.  
+Met het hoogteprofiel krijgen renners en coaches direct inzicht in waar de cruciale klimmetjes, sprintzones en andere belangrijke punten liggen.  
+Zo kunnen race- en trainingsstrategieën beter afgestemd worden op het parcours.  
+
+De gegenereerde afbeelding is geschikt om als overzichtelijk kaartje op bijvoorbeeld de bovenbuis of het stuur van de fiets te plakken — ideaal voor snelle referentie tijdens de race.
 
 ---
 
 ### Instructies
-1. Upload een GPX-bestand van een rit of race.  
-2. Pas de kleuren, lijndikte en afmetingen aan naar wens.  
-3. Voeg belangrijke punten toe zoals klim- of sprintlocaties.  
-4. Bekijk het hoogteprofiel en download het als een hoge resolutie afbeelding.  
-5. Gebruik het profiel om je voor te bereiden en te plannen!
-
----
+1. Upload een GPX-bestand van een trainingsrit of wedstrijd.  
+2. Pas kleuren, lijndikte en afmetingen aan naar voorkeur.  
+3. Voeg belangrijke punten toe zoals klim- en sprintlocaties.  
+4. Bekijk het hoogteprofiel met markeringen.  
+5. Download de afbeelding en plak deze bijvoorbeeld op het stuur voor een snel tactisch overzicht.
 """)
+
 
 # --- GPX bestand upload veld ---
 uploaded_file = st.file_uploader("Upload een GPX-bestand", type=["gpx"])
