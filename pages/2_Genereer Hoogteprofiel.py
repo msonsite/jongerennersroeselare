@@ -13,7 +13,7 @@ st.title("Genereer Hoogteprofiel")
 # --- Uitleg en instructies voor de gebruiker ---
 st.markdown("""
 ### Strategisch doel
-Deze tool is speciaal ontwikkeld voor onze junioren wielerclub om eenvoudig en snel hoogteprofielen te genereren.  
+Deze tool is speciaal ontwikkeld om eenvoudig en snel hoogteprofielen te genereren.  
 Zo kunnen renners en coaches beter inzicht krijgen in het parcours en hun race- en trainingsstrategieën verfijnen.
 
 ---
