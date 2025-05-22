@@ -134,7 +134,7 @@ if uploaded_file is not None:
         keypoints.append({"name": name, "km": km, "elev": interpolated_height, "color": color})
 
     # --- Sidebar: Interval tussen afstandlabels op X-as ---
-    tick_interval = st.sidebar.slider("Interval afstandlabels (km)", 5, 50, 10)
+    tick_interval = st.sidebar.slider("Interval afstandlabels (km)", 5, 50, 20)
 
     # --- Plot bouwen met Plotly ---
     fig = go.Figure()
