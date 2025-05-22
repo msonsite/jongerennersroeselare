@@ -157,7 +157,8 @@ if uploaded_file is not None:
             marker=dict(size=10, color=kp["color"]),
             text=[kp["name"]],
             textposition="top center",
-            showlegend=False
+            showlegend=False,
+            textangle=90
         ))
 
     # --- X-as ticks en labels instellen ---
