@@ -186,7 +186,7 @@ if uploaded_file is not None:
             linecolor='rgba(0,0,0,0)',
             title_text=None,
             zeroline=False,
-            showticklabels=False,
+            showticklabels=True,
             showgrid=False
         ),
         margin=dict(l=40, r=20, t=20, b=40),
