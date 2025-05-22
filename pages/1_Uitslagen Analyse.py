@@ -21,6 +21,27 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# Informatie #
+with st.expander("ℹ️ Strategisch doel & Gebruik"):
+
+    st.markdown("""
+    ### Strategisch doel  
+    Deze tool helpt coaches, renners en begeleiders om prestaties van junior-renners overzichtelijk te monitoren en vergelijken over het seizoen.  
+    Door inzicht te krijgen in individuele en teamprestaties, kan het trainings- en wedstrijdprogramma beter afgestemd worden op sterktes en aandachtspunten.  
+    Het doel is het verbeteren van tactisch inzicht en het stimuleren van consistente groei binnen het team.  
+
+    ---  
+
+    ### Hoe gebruik je deze tool?  
+    1. Upload een Excel-bestand met de uitslagen (gebruik bij voorkeur de standaard template).  
+    2. Vergelijk prestaties van meerdere renners over tijd met de lijngrafiek.  
+    3. Analyseer uitslagen per individuele koers via de staafgrafiek.  
+    4. Bekijk de consistentie van renners (stabiele prestaties = lager standaarddeviatie).  
+    5. Download indien nodig de standaard Excel-template onderaan om je eigen data voor te bereiden.  
+
+    ---  
+    """)
+
 # --- FILE UPLOADER ---
 
 uploaded_file = st.file_uploader("Upload het Excel bestand:", type=["xlsx"])
