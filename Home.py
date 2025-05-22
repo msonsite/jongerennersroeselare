@@ -82,8 +82,8 @@ with st.container():
         <p><b>Gebruik het menu links om te navigeren naar:</b></p>
         <ul>
             <li><b>🏠 Home</b> – Overzicht en introductie.</li>
-            <li><b>🏁 Uitslagen</b> – Bekijk en vergelijk de prestaties van de renners.</li>
-            <li><b>⛰️ GPX Hoogteprofiel Generator</b> – Maak een afdrukbaar profiel van een GPX-bestand.</li>
+            <li><b>🏁 Uitslagen Analyse</b> – Bekijk en vergelijk de prestaties van de renners.</li>
+            <li><b>⛰️ Genereer Hoogteprofiel</b> – Maak een afdrukbaar profiel van een GPX-bestand.</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
