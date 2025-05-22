@@ -166,17 +166,12 @@ if uploaded_file is not None:
         fig.add_trace(go.Scatter(
             x=[kp["km"]],
             y=[kp["elev"]],
-            mode='markers',
+            mode='markers+text',
             marker=dict(size=10, color=kp["color"]),
-            showlegend=False
-        ))
-        fig.add_trace(go.Scatter(
-            x=[kp["km"]],
-            y=[kp["elev"] + 100],
-            mode='text',
             text=[kp["name"]],
-            textfont=dict(size=14, color=kp["color"]),
-            showlegend=False
+            textposition="top center",
+            showlegend=False,
+            textfont=dict(size=14)
         ))
 
     # --- X-as ticks en labels instellen ---
