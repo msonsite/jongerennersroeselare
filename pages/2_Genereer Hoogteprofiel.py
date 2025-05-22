@@ -11,7 +11,7 @@ st.set_page_config(page_title="Genereer Hoogteprofiel", layout="centered")
 st.title("Genereer Hoogteprofiel")
 
 # --- Uitleg en instructies voor de gebruiker ---
-with st.expander("Instructies", expanded=False):
+with st.expander("ℹ️ Strategisch doel en instructies", expanded=False):
     st.markdown("""
     ### Strategisch doel
     Deze tool ondersteunt bij het tactisch plannen van wedstrijden en trainingen.  
