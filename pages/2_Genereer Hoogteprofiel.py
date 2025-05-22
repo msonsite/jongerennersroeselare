@@ -165,7 +165,7 @@ if uploaded_file is not None:
     for kp in keypoints:
         fig.add_trace(go.Scatter(
             x=[kp["km"]],
-            y=[kp["elev"]],
+            y=[kp["elev"]+5],
             mode='markers+text',
             marker=dict(size=10, color=kp["color"]),
             text=[kp["name"]],
