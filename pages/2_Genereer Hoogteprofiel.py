@@ -145,7 +145,8 @@ if uploaded_file is not None:
         mode='lines',
         line=dict(color=line_color, width=line_width),
         hoverinfo='skip',
-        showlegend=False
+        showlegend=False,
+        textangle=90
     ))
 
     # Keypoints als markers + labels
@@ -157,8 +158,7 @@ if uploaded_file is not None:
             marker=dict(size=10, color=kp["color"]),
             text=[kp["name"]],
             textposition="top center",
-            showlegend=False,
-            textangle=90
+            showlegend=False
         ))
 
     # --- X-as ticks en labels instellen ---
