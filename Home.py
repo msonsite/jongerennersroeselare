@@ -62,29 +62,36 @@ header, footer, .css-18e3th9 {
 """, unsafe_allow_html=True)
 
 with st.container():
-    st.markdown("<h1 style='color:#fb5d01;'>Wielrennen Performance</h1>", unsafe_allow_html=True)
-    st.markdown("<h2>Focus. Analyse. Winnen.</h2>", unsafe_allow_html=True)
-
-    st.image("https://jongerennersroeselare.be/assets/images/logo_jrr.png", width=220)
-
     st.markdown("""
-    <p>
-    Website ter analyse van data van de renners.<br>
-    De weg naar succes begint met de juiste data.
-    </p>
+    <div style='text-align: center; padding-top: 30px; padding-bottom: 20px;'>
+        <h1 style='color: #fb5d01; font-size: 3em; margin-bottom: 5px;'>Wielrennen Performance</h1>
+        <h2 style='color: #333; font-weight: 300; margin-top: 0;'>Focus. Analyse. Winnen.</h2>
+        <img src='https://jongerennersroeselare.be/assets/images/logo_jrr.png' width='200' style='margin-top: 20px;'/>
+    </div>
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    <p>
-    Gebruik het menu links om te navigeren naar:
-    <ul>
-        <li><b>Home</b> – De Home-page</li>
-        <li><b>Uitslagen</b> – Bekijk en vergelijk de uitslagen van de renners.</li>
-        <li><b>GPX Hoogteprofiel Generator</b> – Converteer en personaliseer een GPX-file naar een afdrukbaar hoogteprofiel.</li>
-    </ul>
-    </p>
+    <div style='text-align: center; font-size: 1.1em; margin-top: 20px; color: #444;'>
+        <p>Deze website helpt bij het analyseren van rennerdata.<br>
+        De weg naar succes begint met de juiste inzichten.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style='padding: 20px 40px; font-size: 1.05em; color: #222;'>
+        <p><b>Gebruik het menu links om te navigeren naar:</b></p>
+        <ul>
+            <li><b>🏠 Home</b> – Overzicht en introductie.</li>
+            <li><b>🏁 Uitslagen</b> – Bekijk en vergelijk de prestaties van de renners.</li>
+            <li><b>⛰️ GPX Hoogteprofiel Generator</b> – Maak een afdrukbaar profiel van een GPX-bestand.</li>
+        </ul>
+    </div>
     """, unsafe_allow_html=True)
 
 with st.container():
-    st.markdown("""<hr style='border:1px solid #ddd; margin-top: 50px; margin-bottom: 10px;'>""", unsafe_allow_html=True)
-    st.markdown("💻 Developed by **Sander de Lobel**", unsafe_allow_html=True)
+    st.markdown("<hr style='border:1px solid #ccc; margin-top: 50px;'>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style='text-align: center; color: gray; padding-bottom: 20px;'>
+        💻 Ontwikkeld door <strong>Sander de Lobel</strong>
+    </div>
+    """, unsafe_allow_html=True)
