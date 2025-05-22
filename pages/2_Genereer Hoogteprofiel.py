@@ -69,12 +69,13 @@ if uploaded_file is not None:
     })
 
     # --- Sidebar: Profiel instellingen (smoothing & detail) ---
-    with st.sidebar.expander("⚙️ Profiel instellingen", expanded=False):
-        max_points = st.slider(
+    max_points = st.slider(
             "Hoe gedetailleerd het profiel is (meer = fijner)",
             100, 20000, 10000,
             help="Aantal punten waaruit het hoogteprofiel bestaat. Meer punten betekent meer details."
         )
+    
+    with st.sidebar.expander("⚙️ Profiel instellingen", expanded=False):
 
         window_length = st.slider(
             "Hoe vloeiend de lijn is (meer = gladder)",
