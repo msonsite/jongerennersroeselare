@@ -38,8 +38,8 @@ with st.sidebar.expander("🎨 Personaliseer", expanded=False):
         line_color = st.color_picker("Kies je kleur", "#fb5d01")
 
     line_width = st.slider("Lijndikte", 1, 8, 2)
-    cm_width = st.slider("Breedte afbeelding (cm)", 5.0, 30.0, 10.0)
-    cm_height = st.slider("Hoogte afbeelding (cm)", 0.1, 20.0, 1.0)
+    cm_width = st.slider("Breedte afbeelding (cm)", 5.0, 20.0, 10.0)
+    cm_height = st.slider("Hoogte afbeelding (cm)", 0.1, 30.0, 1.0)
 
 # --- Berekenen van pixels vanuit centimeters voor printkwaliteit ---
 dpi = 300
