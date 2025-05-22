@@ -82,6 +82,10 @@ if uploaded_file is not None:
             help="Hoe sterk het hoogteprofiel wordt gladgestreken. Grotere waarde betekent een zachtere, vloeiendere lijn."
         )
 
+    mirror_profile = st.checkbox(
+        "Profiel spiegelen (0 km rechts)", value=False
+    )
+
     # --- Data downsamplen en smoothen met Savitzky-Golay filter ---
     step = max(1, len(df) // max_points)
     df_resampled = df.iloc[::step].reset_index(drop=True)
@@ -95,22 +99,31 @@ if uploaded_file is not None:
 
     # --- Sidebar: Keypoints toevoegen ---
     st.sidebar.header("📍 Voeg keypoints toe")
-    keypoint_names = st.sidebar.text_area("Keypoint namen (één per lijn)", "Col du Test\nSprintzone")
-    keypoint_distances = st.sidebar.text_area("Afstanden (in km, evenveel als namen)", "15.3\n42.7")
+    keypoint_names = st.sidebar.text_area("Keypoint namen (één per lijn)", "GPM 1\nRAV 1\nSPR 1")
+    keypoint_distances = st.sidebar.text_area("Afstanden (in km, evenveel als namen)", "15.3\n42.7\n55.2")
+
+    # Checkbox voor per-keypoint kleuren
     use_custom_colors = st.sidebar.checkbox("Per keypoint een eigen kleur?", False)
 
-    if use_custom_colors:
-        keypoint_colors = st.sidebar.text_area("Kleuren (HEX, optioneel)", "#e6194B\n#3cb44b")
-    else:
-        default_kp_color = st.sidebar.color_picker("Kleur voor keypoints", "#e6194B")
-
-    # --- Verwerken van keypoints inputs ---
+    # Parse namen en afstanden netjes
     kp_names = [k.strip() for k in keypoint_names.split("\n") if k.strip()]
     kp_distances = [float(d.strip()) for d in keypoint_distances.split("\n") if d.strip()]
 
+    # Default kleurenpalet voor automatische toewijzing
+    default_colors = [
+        "#e6194B", "#3cb44b", "#ffe119", "#4363d8",
+        "#f58231", "#911eb4", "#46f0f0", "#f032e6",
+        "#bcf60c", "#fabebe", "#008080", "#e6beff"
+    ]
+
     if use_custom_colors:
-        kp_colors = [c.strip() for c in keypoint_colors.split("\n")]
+        kp_colors = []
+        for i, name in enumerate(kp_names):
+            default_col = default_colors[i % len(default_colors)]
+            color = st.sidebar.color_picker(f"Kleur voor '{name}'", default_col)
+            kp_colors.append(color)
     else:
+        default_kp_color = st.sidebar.color_picker("Kleur voor keypoints", "#e6194B")
         kp_colors = [default_kp_color] * len(kp_names)
 
     keypoints = []
@@ -162,7 +175,8 @@ if uploaded_file is not None:
             showline=False,
             linewidth=0,
             linecolor='rgba(0,0,0,0)',
-            title_text=None
+            title_text=None,
+            autorange='reversed' if mirror_profile else True
         ),
         yaxis=dict(
             showline=False,
