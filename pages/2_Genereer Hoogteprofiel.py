@@ -11,25 +11,27 @@ st.set_page_config(page_title="Genereer Hoogteprofiel", layout="centered")
 st.title("Genereer Hoogteprofiel")
 
 # --- Uitleg en instructies voor de gebruiker ---
-st.markdown("""
-### Strategisch doel
-Deze tool ondersteunt bij het tactisch plannen van wedstrijden en trainingen.  
-Met het hoogteprofiel krijgen renners en coaches direct inzicht in waar de cruciale klimmetjes, sprintzones en andere belangrijke punten liggen.  
-Zo kunnen race- en trainingsstrategieën beter afgestemd worden op het parcours.  
+with st.expander("Instructies", expanded=False):
+    st.markdown("""
+    ### Strategisch doel
+    Deze tool ondersteunt bij het tactisch plannen van wedstrijden en trainingen.  
+    Met het custom hoogteprofiel krijgen renners en coaches direct inzicht in waar de cruciale klimmetjes, sprintzones en andere belangrijke punten liggen.  
+    Zo kunnen race- en trainingsstrategieën beter afgestemd worden op het parcours.  
 
-De gegenereerde afbeelding is geschikt om als overzichtelijk kaartje op bijvoorbeeld de bovenbuis of het stuur van de fiets te plakken — ideaal voor snelle referentie tijdens de race.
+    De gegenereerde afbeelding is geschikt om als overzichtelijk kaartje op bijvoorbeeld de bovenbuis of het stuur van de fiets te plakken — ideaal voor snelle referentie tijdens de race.
 
----
+    ---
 
-### Instructies
-1. Upload een GPX-bestand van een trainingsrit of wedstrijd.  
-2. Pas kleuren, lijndikte en afmetingen aan naar voorkeur.  
-3. Voeg belangrijke punten toe zoals klim- en sprintlocaties.  
-4. Bekijk het hoogteprofiel met keypoints.  
-5. Download de afbeelding en plak deze bijvoorbeeld op de bovenbuis voor een snel tactisch overzicht.
+    ### Instructies
+    1. Upload een GPX-bestand van een trainingsrit of wedstrijd.  
+    2. Pas kleuren, lijndikte en afmetingen aan naar voorkeur in het *Personaliseer* menu links.
+    3. (Optioneel) Gebruik de schuifbalken in het *Profiel instellingen* menu links om de detailgraad en gladheid van het hoogteprofiel aan te passen.
+    4. Voeg belangrijke punten toe zoals klim- en sprintlocaties in het linkerpaneel.  
+    5. Bekijk onderaan het custom hoogteprofiel met keypoints.  
+    6. Download de afbeelding via de "Download" knop en plak deze bijvoorbeeld op de bovenbuis voor een snel tactisch overzicht.
 
----
-""")
+    ---
+    """)
 
 
 # --- GPX bestand upload veld ---
