@@ -8,7 +8,7 @@ from scipy.signal import savgol_filter
 
 # --- Streamlit pagina configuratie en titel ---
 st.set_page_config(page_title="Genereer Hoogteprofiel", layout="centered")
-st.title("GPX Hoogteprofiel Generator")
+st.title("Genereer Hoogteprofiel")
 
 # --- Uitleg en instructies voor de gebruiker ---
 st.markdown(
