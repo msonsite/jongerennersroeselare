@@ -2,7 +2,6 @@ from imports import *
 
 # --- Pagina config en titel ---
 st.set_page_config(page_title="Genereer Hoogteprofiel", layout="centered")
-st.image("https://jongerennersroeselare.be/assets/images/logo_jrr.png", width=200)
 st.markdown(
     f"""
     <h1 style='color:#fb5d01;'>Genereer Hoogteprofiel</h1>
@@ -19,9 +18,7 @@ with st.expander("ℹ️ Strategisch doel en instructies", expanded=False):
     Zo kunnen race- en trainingsstrategieën beter afgestemd worden op het parcours.  
 
     De gegenereerde afbeelding is geschikt om als overzichtelijk kaartje op bijvoorbeeld de bovenbuis of het stuur van de fiets te plakken — ideaal voor snelle referentie tijdens de race.
-
-    ---
-
+                
     ### Instructies
     1. Upload een GPX-bestand van een trainingsrit of wedstrijd.  
     2. Pas alle instellingen aan in de sidebar links:
@@ -39,29 +36,7 @@ with st.expander("ℹ️ Strategisch doel en instructies", expanded=False):
 # --- GPX-file upload veld ---
 uploaded_file = st.file_uploader("Upload een GPX-bestand", type=["gpx"])
 
-# --- Sidebar: Personaliseer sectie ---
-with st.sidebar.expander("🎨 Personaliseer", expanded=False):
-    color_option = st.selectbox(
-        "Kleur opties",
-        ("Zwart", "Oranje", "Custom")
-    )
 
-    if color_option == "Oranje":
-        line_color = "#fb5d01"
-    elif color_option == "Zwart":
-        line_color = "#000000"
-    else:
-        line_color = st.color_picker("Kies je kleur", "#fb5d01")
-
-    line_width = st.number_input("Lijndikte", min_value=1, max_value=8, value=2, step=1)
-    cm_width = st.number_input("Breedte hoogteprofiel (cm)", min_value=5.0, max_value=30.0, value=10.0, step=0.1)
-    cm_height = st.number_input("Hoogte hoogteprofiel (cm)", min_value=0.1, max_value=20.0, value=1.0, step=0.1)
-
-
-# --- Pixels cm conversie ---
-dpi = 300
-px_width = int((cm_width / 2.54) * dpi)
-px_height = int((cm_height / 2.54) * dpi)
 
 # --- Hoofdlogica: verwerken van GPX-file ---
 if uploaded_file is not None:
@@ -84,6 +59,30 @@ if uploaded_file is not None:
         "Afstand (km)": distances,
         "Hoogte (m)": elevations
     })
+
+    # --- Sidebar: Personaliseer sectie ---
+    with st.sidebar.expander("🎨 Personaliseer", expanded=False):
+        color_option = st.selectbox(
+            "Kleur opties",
+            ("Zwart", "Oranje", "Custom")
+        )
+
+        if color_option == "Oranje":
+            line_color = "#fb5d01"
+        elif color_option == "Zwart":
+            line_color = "#000000"
+        else:
+            line_color = st.color_picker("Kies je kleur", "#fb5d01")
+
+        line_width = st.number_input("Lijndikte", min_value=1, max_value=8, value=2, step=1)
+        cm_width = st.number_input("Breedte hoogteprofiel (cm)", min_value=5.0, max_value=30.0, value=10.0, step=0.1)
+        cm_height = st.number_input("Hoogte hoogteprofiel (cm)", min_value=0.1, max_value=20.0, value=1.0, step=0.1)
+
+
+    # --- Pixels cm conversie ---
+    dpi = 300
+    px_width = int((cm_width / 2.54) * dpi)
+    px_height = int((cm_height / 2.54) * dpi)
 
     # --- Sidebar profiel instellingen (smoothing & detail) ---
     with st.sidebar.expander("⚙️ Profiel instellingen", expanded=False):
@@ -116,7 +115,7 @@ if uploaded_file is not None:
     smooth_elev = savgol_filter(df_resampled["Hoogte (m)"], window_length=window_length, polyorder=3)
 
     # --- Sidebar: keypoints toevoegen ---
-    with st.sidebar.expander("📍 Keypoints toevoegen", expanded=True):
+    with st.sidebar.expander("📍 Keypoints toevoegen", expanded=False):
         st.warning("⚠️ Gebruik een punt (.) als decimaalteken, geen komma (,).")
         
         keypoint_names = st.text_area("Keypoint namen (één per lijn)", "GPM 1\nRAV 1\nSPR 1")

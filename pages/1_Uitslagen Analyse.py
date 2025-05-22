@@ -7,9 +7,6 @@ import plotly.express as px
 
 # --- HEADER & INTRODUCTIE ---
 
-# Toon logo bovenaan
-st.image("https://jongerennersroeselare.be/assets/images/logo_jrr.png", width=200)
-
 # Dynamisch huidig jaar bepalen en weergeven
 current_year = datetime.now().year
 
