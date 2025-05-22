@@ -171,6 +171,7 @@ if uploaded_file is not None:
             text=[kp["name"]],
             textposition="top center",
             showlegend=False
+            textfont=dict(size=20)
         ))
 
     # --- X-as ticks en labels instellen ---
@@ -190,8 +191,7 @@ if uploaded_file is not None:
             linecolor='rgba(0,0,0,0)',
             title_text=None,
             autorange='reversed' if mirror_profile else True,
-            showgrid=False,
-            textfont=dict(size=20)
+            showgrid=False
         ),
         yaxis=dict(
             showline=False,
