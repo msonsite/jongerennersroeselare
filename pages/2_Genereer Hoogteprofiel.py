@@ -145,8 +145,7 @@ if uploaded_file is not None:
         mode='lines',
         line=dict(color=line_color, width=line_width),
         hoverinfo='skip',
-        showlegend=False,
-        textangle=90
+        showlegend=False
     ))
 
     # Keypoints als markers + labels
