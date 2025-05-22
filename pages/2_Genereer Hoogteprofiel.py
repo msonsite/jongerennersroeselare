@@ -171,7 +171,7 @@ if uploaded_file is not None:
             text=[kp["name"]],
             textposition="top center",
             showlegend=False,
-            textfont=dict(size=14)
+            textfont=dict(size=14, color=kp["color"])
         ))
 
     # --- X-as ticks en labels instellen ---
