@@ -162,33 +162,17 @@ if uploaded_file is not None:
     ))
 
     # Keypoints als markers + labels
-    # Eerst: bepaal het bereik van je y-as (elevatie)
-    elevs = [kp["elev"] for kp in keypoints]
-    min_elev = min(elevs)
-    max_elev = max(elevs)
-    offset = (max_elev - min_elev) * 0.1  # Offset = 3% van y-bereik
-
-    # Voeg markers + offset-tekst toe
     for kp in keypoints:
-        # 1. Marker (blijft op de juiste plaats)
         fig.add_trace(go.Scatter(
             x=[kp["km"]],
             y=[kp["elev"]],
-            mode='markers',
+            mode='markers+text',
             marker=dict(size=10, color=kp["color"]),
-            showlegend=False
-        ))
-
-        # 2. Label erboven (met dynamische offset)
-        fig.add_trace(go.Scatter(
-            x=[kp["km"]],
-            y=[kp["elev"] + offset],  # Dynamisch verhoogde positie
-            mode='text',
             text=[kp["name"]],
-            textfont=dict(size=14, color=kp["color"]),
-            showlegend=False
-    ))
-
+            textposition="top center",
+            showlegend=False,
+            textfont=dict(size=14)
+        ))
 
     # --- X-as ticks en labels instellen ---
     max_dist = df_resampled["Afstand (km)"].max()
