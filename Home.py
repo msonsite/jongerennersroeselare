@@ -80,6 +80,7 @@ with st.container():
     <ul>
         <li><b>Home</b> – De Home-page</li>
         <li><b>Uitslagen</b> – Bekijk en vergelijk de uitslagen van de renners.</li>
+        <li><b>GPX Hoogteprofiel Generator</b> – Converteer en personaliseer een GPX-file naar een afdrukbaar hoogteprofiel.</li>
     </ul>
     </p>
     """, unsafe_allow_html=True)
