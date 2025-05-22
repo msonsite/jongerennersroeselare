@@ -21,25 +21,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown("---")
-st.markdown("\n\nDownload hieronder de input template indien nodig.")
-
-# --- DOWNLOAD TEMPLATE BUTTON ---
-
-try:
-    with open("standardized_template.xlsx", "rb") as template_file:
-        st.download_button(
-            label="Download standaard Excel-template",
-            data=template_file,
-            file_name="standardized_template.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        )
-except FileNotFoundError:
-    # Template bestand niet gevonden, geen download-knop tonen
-    pass
-
-st.markdown("---")
-
 # --- FILE UPLOADER ---
 
 uploaded_file = st.file_uploader("Upload het Excel bestand:", type=["xlsx"])
@@ -201,3 +182,22 @@ if uploaded_file:
 
 else:
     st.info("Upload de Excel template die een ingevuld uitslagen tabblad bevat.")
+
+st.markdown("---")
+st.markdown("\n\nDownload hieronder de input template indien nodig.")
+
+# --- DOWNLOAD TEMPLATE BUTTON ---
+
+try:
+    with open("standardized_template.xlsx", "rb") as template_file:
+        st.download_button(
+            label="Download standaard Excel-template",
+            data=template_file,
+            file_name="standardized_template.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+except FileNotFoundError:
+    # Template bestand niet gevonden, geen download-knop tonen
+    pass
+
+st.markdown("---")
