@@ -24,6 +24,8 @@ Zo kunnen renners en coaches beter inzicht krijgen in het parcours en hun race- 
 3. Voeg belangrijke punten toe zoals klim- of sprintlocaties.  
 4. Bekijk het hoogteprofiel en download het als een hoge resolutie afbeelding.  
 5. Gebruik het profiel om je voor te bereiden en te plannen!
+
+---
 """)
 
 # --- GPX bestand upload veld ---
