@@ -170,7 +170,7 @@ if uploaded_file is not None:
             marker=dict(size=10, color=kp["color"]),
             text=[kp["name"]],
             textposition="top center",
-            showlegend=False
+            showlegend=False,
             textfont=dict(size=20)
         ))
 
