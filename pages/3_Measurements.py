@@ -23,9 +23,9 @@ kops_status = st.sidebar.selectbox("KOPS status", ["Neutraal", "Forward", "Back"
 shoe_stack = st.sidebar.number_input("Shoe–pedal stack (mm)", 0.0, 25.0, 8.5, step=0.5)
 
 # --- Binnenbeenlengte methodes ---
-conservatief = inseam * 200
-neutraal = inseam * 202
-kracht = inseam * 205
+conservatief = inseam * 2
+neutraal = inseam * 2.02
+kracht = inseam * 2.05
 
 st.subheader("1️⃣ Binnenbeenlengte richtlijnen")
 st.write(f"- Conservatief: {conservatief:.1f} mm → korte, cadansvriendelijke crank")
