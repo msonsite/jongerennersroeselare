@@ -7,22 +7,22 @@ st.set_page_config(page_title="Wetenschappelijke Cranklengte Tool", layout="wide
 st.title("🔬 Wetenschappelijke Cranklengte Calculator")
 
 # --- Input ---
-st.sidebar.header("🚴‍♂️ Fietsersgegevens")
-height = st.sidebar.number_input("Lengte (cm)", 140, 220, 180)
-inseam = st.sidebar.number_input("Inseam (cm)", 60, 100, 86)
-femur = st.sidebar.number_input("Femur lengte (cm)", 35, 60, 40)
-tibia = st.sidebar.number_input("Tibia lengte (cm)", 30, 50, 36)
+st.sidebar.header("🚴‍♂️ Fietsersgegevens (float inputs)")
+height = st.sidebar.number_input("Lengte (cm)", 140.0, 220.0, 180.0, step=0.5)
+inseam = st.sidebar.number_input("Inseam (cm)", 60.0, 100.0, 86.0, step=0.5)
+femur = st.sidebar.number_input("Femur lengte (cm)", 35.0, 60.0, 40.0, step=0.5)
+tibia = st.sidebar.number_input("Tibia lengte (cm)", 30.0, 50.0, 36.0, step=0.5)
 current_crank = st.sidebar.number_input("Huidige cranklengte (mm)", 150.0, 200.0, 172.5, step=0.5)
-cadence = st.sidebar.number_input("Threshold cadans (rpm)", 60, 120, 90)
-sprint_cadence = st.sidebar.number_input("Sprint cadans (rpm)", 80, 150, 120)
-power = st.sidebar.number_input("Vermogen (W)", 50, 500, 250)
+cadence = st.sidebar.number_input("Threshold cadans (rpm)", 60.0, 120.0, 90.0, step=1.0)
+sprint_cadence = st.sidebar.number_input("Sprint cadans (rpm)", 80.0, 150.0, 120.0, step=1.0)
+power = st.sidebar.number_input("Vermogen (W)", 50.0, 500.0, 250.0, step=5.0)
 mobility_issue = st.sidebar.selectbox("Mobiliteitsbeperkingen", ["Nee", "Ja"])
 discipline = st.sidebar.selectbox("Discipline / Bike type", ["Road", "TT/Track", "Climbing", "MTB/Gravel"])
-saddle_height = st.sidebar.number_input("Saddle height BB→saddle (mm)", 600, 900, 750)
+saddle_height = st.sidebar.number_input("Saddle height BB→saddle (mm)", 600.0, 900.0, 750.0, step=1.0)
 kops_status = st.sidebar.selectbox("KOPS status", ["Neutraal", "Forward", "Back"])
-shoe_stack = st.sidebar.number_input("Shoe–pedal stack (mm)", 0, 25, 8.5)
+shoe_stack = st.sidebar.number_input("Shoe–pedal stack (mm)", 0.0, 25.0, 8.5, step=0.5)
 
-# --- Berekeningen: binnenbeenlengte methodes ---
+# --- Binnenbeenlengte methodes ---
 conservatief = inseam * 0.200
 neutraal = inseam * 0.205
 kracht = inseam * 0.210
@@ -97,33 +97,33 @@ else:
 
 # --- Wetenschappelijke optimalisatie ---
 st.subheader("📊 Wetenschappelijke optimalisatie")
-crank_lengths = np.arange(150, 181, 2.5)
-torque = power / (2 * np.pi * cadence / 60)
-force = torque / (crank_lengths / 1000)
-efficiency = np.exp(-0.01 * (crank_lengths - 170)**2)
+crank_lengths = np.arange(150.0, 181.0, 2.5)
+torque = float(power) / (2 * np.pi * float(cadence) / 60.0)
+force = torque / (crank_lengths / 1000.0)
+efficiency = np.exp(-0.01 * (crank_lengths - 170.0)**2)
 score = force * efficiency
 
 # Optimalisatie
 def objective(crank):
-    torque = power / (2 * np.pi * cadence / 60)
-    force = torque / (crank/1000)
-    eff = np.exp(-0.01 * (crank-170)**2)
-    return -force*eff
+    torque = float(power) / (2 * np.pi * float(cadence) / 60.0)
+    force = torque / (crank / 1000.0)
+    eff = np.exp(-0.01 * (crank - 170.0)**2)
+    return -force * eff
 
-from scipy.optimize import minimize
-opt_result = minimize(objective, 170, bounds=[(150,180)])
+opt_result = minimize(objective, 170.0, bounds=[(150.0, 180.0)])
 optimal_crank = opt_result.x[0]
 
 # --- Visualisatie ---
 fig, ax = plt.subplots(figsize=(8,5))
 ax.plot(crank_lengths, score, label="Force x Efficiëntie")
 ax.axvline(optimal_crank, color='r', linestyle='--', label=f'Optimaal: {optimal_crank:.1f} mm')
-ax.scatter(current_crank, torque/(current_crank/1000)*np.exp(-0.01*(current_crank-170)**2), color='g', label="Huidige crank")
+ax.scatter(current_crank, torque/(current_crank/1000.0)*np.exp(-0.01*(current_crank-170.0)**2), color='g', label="Huidige crank")
 ax.set_xlabel("Cranklengte (mm)")
 ax.set_ylabel("Force x Efficiëntie")
 ax.legend()
 st.pyplot(fig)
 
+# --- Aanbevolen cranklengtes ---
 st.subheader("✅ Aanbevolen cranklengtes")
 st.write(f"- Graeme Obree methode: {height*0.95:.1f} mm")
 st.write(f"- 'Machine' methode: {1.25*inseam+65:.1f} mm")
