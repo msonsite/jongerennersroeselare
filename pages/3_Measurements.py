@@ -1,5 +1,5 @@
 # streamlit_crank_calc.py
-import streamlit as st
+from imports import *
 
 st.set_page_config(page_title="Cranklengte Calculator", layout="centered")
 st.title("🚴 Cranklengte Calculator")
