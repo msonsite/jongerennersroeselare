@@ -1,64 +1,95 @@
+import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy.optimize import minimize
 
-# Configuratie
-sns.set(style="whitegrid")
-np.random.seed(42)
+st.set_page_config(page_title="Wetenschappelijke Cranklengte Calculator", layout="centered")
+st.title("🔬 Wetenschappelijke Cranklengte Calculator")
 
-# Inputparameters
-height = 180  # cm
-inseam = 86  # cm
-cadence = 90  # rpm
-power = 250  # W
-crank_lengths = np.array([150, 155, 160, 165, 170, 172.5, 175, 177.5, 180])  # mm
+# --- Inputs ---
+height = st.number_input("Lengte (cm)", 140, 220, 180)
+inseam = st.number_input("Inseam (cm)", 60, 100, 86)
+current_crank = st.number_input("Huidige cranklengte (mm)", 150, 200, 172)
+cadence = st.number_input("Cadans (rpm)", 60, 120, 90)
+power = st.number_input("Vermogen (W)", 50, 500, 250)
 
-# Fysieke eigenschappen
-leg_length = inseam * 0.9  # schatting van beenlengte
-hip_angle = 90  # graden
-knee_angle = 30  # graden
+# Optioneel: merkkeuze voor crank
+brand = st.selectbox("Crank merk", ["Shimano", "SRAM", "Andere"])
 
-# Biomechanische parameters
+# --- Berekeningen ---
+# Baseline methodes
+obree_crank = height * 0.95
+machine_crank = 1.25 * inseam + 65
+
+# Cranklengtes voor grafiek
+crank_lengths = np.arange(150, 181, 2.5)
+
+# Kracht berekening
 torque = power / (2 * np.pi * cadence / 60)  # Nm
 force = torque / (crank_lengths / 1000)  # N
 
-# Spieractiviteit (EMG) - benaderingen gebaseerd op literatuur
+# Spieractiviteit simulatie (EMG benadering)
 muscle_activity = {
-    'gluteus_maximus': 0.8,
-    'vastus_lateralis': 0.7,
-    'rectus_femoris': 0.6,
-    'biceps_femoris': 0.5,
-    'gastrocnemius': 0.4
+    'Gluteus Maximus': np.exp(-0.01*(crank_lengths-170)**2),
+    'Vastus Lateralis': np.exp(-0.015*(crank_lengths-170)**2),
+    'Rectus Femoris': np.exp(-0.02*(crank_lengths-170)**2)
 }
 
-# Optimalisatie van cranklengte op basis van kracht en cadans
+# --- Optimalisatie ---
 def objective(crank_length):
-    torque = power / (2 * np.pi * cadence / 60)
-    force = torque / (crank_length / 1000)
-    efficiency = np.exp(-0.01 * (crank_length - 170)**2)  # hypothetische efficiëntiefunctie
-    return -efficiency * force  # negatief voor minimalisatie
+    torque = power / (2*np.pi*cadence/60)
+    force = torque / (crank_length/1000)
+    efficiency = np.exp(-0.01*(crank_length-170)**2)
+    return -efficiency*force
 
-optimal_result = minimize(objective, 170, bounds=[(150, 180)])
-optimal_crank_length = optimal_result.x[0]
+optimal_result = minimize(objective, 170, bounds=[(150,180)])
+optimal_crank = optimal_result.x[0]
 
-# Visualisatie van kracht vs. cranklengte
-plt.figure(figsize=(10, 6))
-plt.plot(crank_lengths, force, label='Kracht (N)', color='b')
-plt.axvline(x=optimal_crank_length, color='r', linestyle='--', label=f'Optimaal: {optimal_crank_length:.1f} mm')
-plt.title('Kracht vs. Cranklengte')
-plt.xlabel('Cranklengte (mm)')
-plt.ylabel('Kracht (N)')
-plt.legend()
-plt.grid(True)
-plt.show()
+# --- Grafiek: Kracht vs. Cranklengte ---
+st.subheader("📊 Kracht vs. Cranklengte")
+fig, ax = plt.subplots(figsize=(8,5))
+ax.plot(crank_lengths, force, label='Benodigde kracht (N)')
+ax.axvline(x=optimal_crank, color='r', linestyle='--', label=f'Optimaal: {optimal_crank:.1f} mm')
+ax.scatter(current_crank, power / (2 * np.pi * cadence / 60) / (current_crank/1000), color='g', label="Huidige crank")
+ax.set_xlabel("Cranklengte (mm)")
+ax.set_ylabel("Kracht (N)")
+ax.legend()
+st.pyplot(fig)
 
-# Visualisatie van spieractiviteit
-plt.figure(figsize=(10, 6))
-plt.bar(muscle_activity.keys(), muscle_activity.values(), color='g')
-plt.title('Gesimuleerde Spieractiviteit bij Verschillende Cranklengtes')
-plt.ylabel('Spieractiviteit (%)')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
+# --- Grafiek: Spieractiviteit ---
+st.subheader("💪 Gesimuleerde spieractiviteit per cranklengte")
+fig2, ax2 = plt.subplots(figsize=(8,5))
+for muscle, activity in muscle_activity.items():
+    ax2.plot(crank_lengths, activity, label=muscle)
+ax2.set_xlabel("Cranklengte (mm)")
+ax2.set_ylabel("Relatieve spieractiviteit (gesimuleerd)")
+ax2.legend()
+st.pyplot(fig2)
+
+# --- Output aanbevolen cranks ---
+st.subheader("✅ Aanbevolen cranklengtes")
+st.write(f"- Graeme Obree methode: {obree_crank:.1f} mm")
+st.write(f"- 'Machine' methode: {machine_crank:.1f} mm")
+st.write(f"- Optimalisatie kracht/cadans: {optimal_crank:.1f} mm")
+st.write(f"- Huidige crank: {current_crank} mm")
+
+# --- Gangbare cranklengtes per merk ---
+st.subheader("🛠️ Gangbare cranklengtes")
+cranks = {
+    "Shimano": [160, 165, 167.5, 170, 172.5, 175],
+    "SRAM": [160, 165, 170, 172.5, 175, 177.5]
+}
+if brand in cranks:
+    st.write(f"{brand} cranklengtes: {cranks[brand]} mm")
+else:
+    st.write("Voer een cranklengte naar keuze in of gebruik andere merken.")
+
+# --- Aanbeveling op basis cadans ---
+st.subheader("💡 Aanbeveling")
+if cadence > 95:
+    st.write("Overweeg een kortere crank voor hogere cadans en betere aerodynamica.")
+elif cadence < 85:
+    st.write("Een langere crank kan gunstig zijn voor krachtigere pedaalslagen.")
+else:
+    st.write("Huidige cadans is neutraal, huidige crank waarschijnlijk geschikt.")
