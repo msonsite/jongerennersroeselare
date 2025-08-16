@@ -17,12 +17,12 @@ mobility_issue = st.selectbox("Mobility issues?", ["No", "Yes"])
 discipline = st.selectbox("Bike discipline", ["Road", "TT", "Track", "Climbing", "MTB", "Gravel"])
 stack = st.number_input("Shoe–pedal stack (mm)", min_value=0.0, max_value=30.0, value=8.5)
 
-# --- Baseline crank berekening ---
+# --- Baseline crank range ---
 baseline_min = round(inseam * 0.200, 1)
 baseline_neutral = round(inseam * 0.205, 1)
 baseline_max = round(inseam * 0.210, 1)
 
-# --- Cadans interpretatie ---
+# --- Cadence interpretatie ---
 if threshold_cadence < 85:
     cadence_note = "Krachtgeoriënteerd → langere crank gunstig"
 elif threshold_cadence > 95:
@@ -30,7 +30,7 @@ elif threshold_cadence > 95:
 else:
     cadence_note = "Neutraal → huidige crank waarschijnlijk oké"
 
-# --- Femur / Tibia interpretatie ---
+# --- Femur/Tibia interpretatie ---
 if femur > tibia * 1.05:
     ratio_note = "Femur dominant → langere crank kan voordeel geven"
 elif tibia > femur * 1.05:
@@ -38,10 +38,10 @@ elif tibia > femur * 1.05:
 else:
     ratio_note = "Neutraal → geen sterke voorkeur"
 
-# --- Mobiliteit ---
+# --- Mobiliteit interpretatie ---
 mobility_note = "Mobiliteit beperkt → kortere crank aanbevolen" if mobility_issue == "Yes" else "Geen mobiliteitsissues → alle lengtes mogelijk"
 
-# --- Discipline ---
+# --- Discipline interpretatie ---
 discipline_lower = discipline.lower()
 if discipline_lower in ["tt", "track"]:
     discipline_note = "Kortere cranks vaak beter (aero, hoge cadans, kniehoek beperken)"
@@ -55,29 +55,29 @@ else:
 # --- Stack invloed ---
 stack_note = "Hoge stack → comfort kan beperken bij lange cranks, overweeg iets korter" if stack > 15 else "Stack laag → vrij om langere cranks te gebruiken"
 
-# --- Beslissing finale crank ---
-recommended_crank = baseline_neutral  # start bij neutraal
+# --- Berekening aanbevolen crank ---
+recommended_crank = baseline_neutral
 
-# Pas aan op cadans
+# Aanpassing op cadans
 if threshold_cadence < 85:
     recommended_crank += 2.5
 elif threshold_cadence > 95:
     recommended_crank -= 2.5
 
-# Pas aan op femur/tibia ratio
+# Aanpassing op femur/tibia ratio
 if femur > tibia * 1.05:
     recommended_crank += 2.5
 elif tibia > femur * 1.05:
     recommended_crank -= 2.5
 
-# Pas aan op mobiliteit
+# Aanpassing op mobiliteit
 if mobility_issue == "Yes":
     recommended_crank -= 2.5
 
 # Limiteer binnen baseline range
 recommended_crank = max(baseline_min, min(recommended_crank, baseline_max))
 
-# Saddle aanpassing
+# Bereken saddle adjustment
 saddle_adjustment = recommended_crank - current_crank
 
 # --- Output ---
