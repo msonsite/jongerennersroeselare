@@ -10,7 +10,7 @@ st.title("🔬 Wetenschappelijke Cranklengte Calculator")
 # --- Inputs ---
 height = st.number_input("Lengte (cm)", 140, 220, 180)
 inseam = st.number_input("Inseam (cm)", 60, 100, 86)
-current_crank = st.number_input("Huidige cranklengte (mm)", 150, 200, 172)
+current_crank = st.number_input("Huidige cranklengte (mm)", min_value=150.0, max_value=200.0, value=172.5, step=0.5)
 cadence = st.number_input("Cadans (rpm)", 60, 120, 90)
 power = st.number_input("Vermogen (W)", 50, 500, 250)
 
