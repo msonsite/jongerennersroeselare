@@ -1,94 +1,50 @@
 import streamlit as st
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-st.set_page_config(page_title="Cranklengte Calculator", layout="centered")
-st.title("🚴 Cranklengte Calculator")
+# Configuratie
+st.set_page_config(page_title="Geavanceerde Cranklengte Calculator", layout="centered")
+st.title("🚴 Geavanceerde Cranklengte Calculator")
 
-st.markdown("Vul hieronder je gegevens in en krijg automatisch advies voor optimale cranklengte:")
+# Inputvelden
+height = st.number_input("Lengte (cm)", min_value=140, max_value=220, value=180, step=1)
+inseam = st.number_input("Inseam (cm)", min_value=60, max_value=100, value=86, step=1)
+current_crank = st.number_input("Huidige cranklengte (mm)", min_value=150, max_value=200, value=172, step=1)
+cadence = st.number_input("Cadans (rpm)", min_value=60, max_value=120, value=90, step=1)
+power = st.number_input("Vermogen (W)", min_value=50, max_value=500, value=200, step=10)
 
-# --- Input ---
-inseam = st.number_input("Inseam (mm)", min_value=600.0, max_value=1000.0, value=860.0, step=1.0)
-current_crank = st.number_input("Huidige cranklengte (mm)", min_value=150.0, max_value=200.0, value=172.5, step=0.5)
-threshold_cadence = st.number_input("Threshold cadence (rpm)", min_value=60.0, max_value=130.0, value=85.0, step=1.0)
-sprint_cadence = st.number_input("Sprint cadence (rpm)", min_value=80.0, max_value=150.0, value=125.0, step=1.0)
-femur = st.number_input("Femur lengte (mm)", min_value=200.0, max_value=500.0, value=400.0, step=1.0)
-tibia = st.number_input("Tibia lengte (mm)", min_value=200.0, max_value=500.0, value=360.0, step=1.0)
-stack = st.number_input("Shoe–pedal stack (mm)", min_value=0.0, max_value=30.0, value=8.5, step=0.1)
+# Berekeningen
+obree_crank = height * 0.95
+machine_crank = 1.25 * inseam + 65
 
-mobility_issue = st.selectbox("Mobility issues?", ["No", "Yes"])
-discipline = st.selectbox("Bike discipline", ["Road", "TT", "Track", "Climbing", "MTB", "Gravel"])
+# Visualisatie: Cranklengte vs. Cadans
+crank_lengths = np.array([150, 160, 170, 180, 190])
+cadence_values = 100 * np.exp(-0.05 * (crank_lengths - 170))  # Hypothetisch model
 
-# --- Baseline crank range ---
-baseline_min = round(inseam * 0.200, 1)
-baseline_neutral = round(inseam * 0.205, 1)
-baseline_max = round(inseam * 0.210, 1)
+fig, ax = plt.subplots()
+ax.plot(crank_lengths, cadence_values, label="Cadans vs. Cranklengte", color='b')
+ax.scatter(current_crank, cadence, color='r', label="Huidige positie")
+ax.set_xlabel("Cranklengte (mm)")
+ax.set_ylabel("Cadans (rpm)")
+ax.legend()
+st.pyplot(fig)
 
-# --- Cadence interpretatie ---
-if threshold_cadence < 85:
-    cadence_note = "Krachtgeoriënteerd → langere crank gunstig"
-elif threshold_cadence > 95:
-    cadence_note = "Cadansgericht → kortere crank gunstig"
+# Analyse: Kracht vs. Cadans
+force = power / (2 * np.pi * cadence / 60)  # Kracht = Vermogen / (2 * pi * Cadans / 60)
+st.write(f"Benodigde kracht bij {cadence} rpm: {force:.2f} N")
+
+# Conclusies
+st.subheader("🔍 Conclusies")
+st.write(f"Op basis van je lengte en inseam, zijn hier enkele aanbevolen cranklengtes:")
+st.write(f"- Graeme Obree methode: {obree_crank:.1f} mm")
+st.write(f"- 'Machine' methode: {machine_crank:.1f} mm")
+st.write(f"Je huidige cranklengte is {current_crank} mm, wat binnen het gangbare bereik valt.")
+
+# Aanbevelingen
+st.subheader("💡 Aanbevelingen")
+if cadence > 90:
+    st.write("Overweeg een kortere cranklengte voor hogere cadans en betere aerodynamica.")
 else:
-    cadence_note = "Neutraal → huidige crank waarschijnlijk oké"
-
-# --- Femur/Tibia interpretatie ---
-if femur > tibia * 1.05:
-    ratio_note = "Femur dominant → langere crank kan voordeel geven"
-elif tibia > femur * 1.05:
-    ratio_note = "Tibia dominant → kortere crank vaak comfortabeler"
-else:
-    ratio_note = "Neutraal → geen sterke voorkeur"
-
-# --- Mobiliteit interpretatie ---
-mobility_note = "Mobiliteit beperkt → kortere crank aanbevolen" if mobility_issue == "Yes" else "Geen mobiliteitsissues → alle lengtes mogelijk"
-
-# --- Discipline interpretatie ---
-discipline_lower = discipline.lower()
-if discipline_lower in ["tt", "track"]:
-    discipline_note = "Kortere cranks vaak beter (aero, hoge cadans, kniehoek beperken)"
-elif discipline_lower == "climbing":
-    discipline_note = "Langere cranks mogelijk (meer hefboom), mits mobiliteit toelaat"
-elif discipline_lower in ["mtb", "gravel"]:
-    discipline_note = "Kortere cranks vaak beter (clearance/controle)"
-else:
-    discipline_note = "Neutraal tot iets langer; balans cadans/kracht afhankelijk van stijl"
-
-# --- Stack invloed ---
-stack_note = "Hoge stack → comfort kan beperken bij lange cranks, overweeg iets korter" if stack > 15 else "Stack laag → vrij om langere cranks te gebruiken"
-
-# --- Berekening aanbevolen crank ---
-recommended_crank = baseline_neutral
-
-# Aanpassing op cadans
-if threshold_cadence < 85:
-    recommended_crank += 2.5
-elif threshold_cadence > 95:
-    recommended_crank -= 2.5
-
-# Aanpassing op femur/tibia ratio
-if femur > tibia * 1.05:
-    recommended_crank += 2.5
-elif tibia > femur * 1.05:
-    recommended_crank -= 2.5
-
-# Aanpassing op mobiliteit
-if mobility_issue == "Yes":
-    recommended_crank -= 2.5
-
-# Limiteer binnen baseline range
-recommended_crank = max(baseline_min, min(recommended_crank, baseline_max))
-
-# Bereken saddle adjustment
-saddle_adjustment = recommended_crank - current_crank
-
-# --- Output ---
-st.subheader("📊 Analyse per parameter")
-st.markdown(f"- **Cadansprofiel:** {cadence_note}")
-st.markdown(f"- **Femur/Tibia ratio:** {ratio_note}")
-st.markdown(f"- **Mobiliteit:** {mobility_note}")
-st.markdown(f"- **Discipline:** {discipline_note}")
-st.markdown(f"- **Stack invloed:** {stack_note}")
-
-st.subheader("✅ Aanbevolen cranklengte")
-st.markdown(f"- **Cranklengte:** {recommended_crank:.1f} mm")
-st.markdown(f"- **Saddle aanpassen:** {saddle_adjustment:+.1f} mm om beenhoek gelijk te houden")
-st.markdown(f"- **Baseline range:** {baseline_min:.1f} – {baseline_max:.1f} mm")
+    st.write("Een langere cranklengte kan voordelig zijn voor krachtigere pedaalslagen.")
