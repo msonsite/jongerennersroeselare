@@ -22,9 +22,9 @@ saddle_height = st.sidebar.number_input("Saddle height BB→saddle (mm)", 600.0,
 kops_status = st.sidebar.selectbox("KOPS status", ["Neutraal", "Forward", "Back"])
 
 # --- Binnenbeenlengte methodes ---
-conservatief = inseam * 2
-neutraal = inseam * 2.02
-kracht = inseam * 2.05
+conservatief = inseam * 1.98
+neutraal = inseam * 2.00
+kracht = inseam * 2.04
 
 st.subheader("1️⃣ Binnenbeenlengte richtlijnen")
 st.write(f"- Conservatief: {conservatief:.1f} mm → korte, cadansvriendelijke crank")
