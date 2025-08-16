@@ -20,7 +20,29 @@ mobility_issue = st.sidebar.selectbox("Mobiliteitsbeperkingen", ["Nee", "Ja"])
 discipline = st.sidebar.selectbox("Discipline / Bike type", ["Road", "TT/Track", "Climbing", "MTB/Gravel"])
 saddle_height = st.sidebar.number_input("Saddle height BB→saddle (mm)", 600.0, 900.0, 750.0, step=1.0)
 kops_status = st.sidebar.selectbox("KOPS status", ["Neutraal", "Forward", "Back"])
-shoe_stack = st.sidebar.number_input("Shoe–pedal stack (mm)", 0.0, 25.0, 8.5, step=0.5)
+
+# --- Pedalen / stack hoogte ---
+st.sidebar.subheader("Pedaal type & stack hoogte")
+pedal_type = st.sidebar.selectbox(
+    "Selecteer pedaal", 
+    ["Shimano SPD-SL", "Shimano SPD", "Look Keo", "Look Keo Blade", 
+     "Speedplay Zero/Nano", "Time ATAC", "Crankbrothers Eggbeater"]
+)
+
+# Stack hoogte per pedaal (mm)
+pedal_stack_dict = {
+    "Shimano SPD-SL": 12.5,
+    "Shimano SPD": 7.0,
+    "Look Keo": 12.0,
+    "Look Keo Blade": 13.0,
+    "Speedplay Zero/Nano": 5.5,
+    "Time ATAC": 9.5,
+    "Crankbrothers Eggbeater": 8.0
+}
+
+shoe_stack = pedal_stack_dict[pedal_type]
+
+st.write(f"📏 Stack hoogte van gekozen pedaal ({pedal_type}): {shoe_stack} mm")
 
 # --- Binnenbeenlengte methodes ---
 conservatief = inseam * 2
