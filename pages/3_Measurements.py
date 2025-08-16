@@ -1,5 +1,4 @@
-# streamlit_crank_calc.py
-from imports import *
+import streamlit as st
 
 st.set_page_config(page_title="Cranklengte Calculator", layout="centered")
 st.title("🚴 Cranklengte Calculator")
@@ -7,15 +6,16 @@ st.title("🚴 Cranklengte Calculator")
 st.markdown("Vul hieronder je gegevens in en krijg automatisch advies voor optimale cranklengte:")
 
 # --- Input ---
-inseam = st.number_input("Inseam (mm)", min_value=600, max_value=1000, value=860)
-current_crank = st.number_input("Huidige cranklengte (mm)", min_value=150, max_value=200, value=172.5)
-threshold_cadence = st.number_input("Threshold cadence (rpm)", min_value=60, max_value=130, value=85)
-sprint_cadence = st.number_input("Sprint cadence (rpm)", min_value=80, max_value=150, value=125)
-femur = st.number_input("Femur lengte (mm)", min_value=200, max_value=500, value=400)
-tibia = st.number_input("Tibia lengte (mm)", min_value=200, max_value=500, value=360)
+inseam = st.number_input("Inseam (mm)", min_value=600.0, max_value=1000.0, value=860.0, step=1.0)
+current_crank = st.number_input("Huidige cranklengte (mm)", min_value=150.0, max_value=200.0, value=172.5, step=0.5)
+threshold_cadence = st.number_input("Threshold cadence (rpm)", min_value=60.0, max_value=130.0, value=85.0, step=1.0)
+sprint_cadence = st.number_input("Sprint cadence (rpm)", min_value=80.0, max_value=150.0, value=125.0, step=1.0)
+femur = st.number_input("Femur lengte (mm)", min_value=200.0, max_value=500.0, value=400.0, step=1.0)
+tibia = st.number_input("Tibia lengte (mm)", min_value=200.0, max_value=500.0, value=360.0, step=1.0)
+stack = st.number_input("Shoe–pedal stack (mm)", min_value=0.0, max_value=30.0, value=8.5, step=0.1)
+
 mobility_issue = st.selectbox("Mobility issues?", ["No", "Yes"])
 discipline = st.selectbox("Bike discipline", ["Road", "TT", "Track", "Climbing", "MTB", "Gravel"])
-stack = st.number_input("Shoe–pedal stack (mm)", min_value=0.0, max_value=30.0, value=8.5)
 
 # --- Baseline crank range ---
 baseline_min = round(inseam * 0.200, 1)
@@ -89,6 +89,6 @@ st.markdown(f"- **Discipline:** {discipline_note}")
 st.markdown(f"- **Stack invloed:** {stack_note}")
 
 st.subheader("✅ Aanbevolen cranklengte")
-st.markdown(f"- **Cranklengte:** {recommended_crank} mm")
+st.markdown(f"- **Cranklengte:** {recommended_crank:.1f} mm")
 st.markdown(f"- **Saddle aanpassen:** {saddle_adjustment:+.1f} mm om beenhoek gelijk te houden")
-st.markdown(f"- **Baseline range:** {baseline_min} – {baseline_max} mm")
+st.markdown(f"- **Baseline range:** {baseline_min:.1f} – {baseline_max:.1f} mm")
