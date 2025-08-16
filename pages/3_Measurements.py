@@ -20,33 +20,12 @@ mobility_issue = st.sidebar.selectbox("Mobiliteitsbeperkingen", ["Nee", "Ja"])
 discipline = st.sidebar.selectbox("Discipline / Bike type", ["Road", "TT/Track", "Climbing", "MTB/Gravel"])
 saddle_height = st.sidebar.number_input("Saddle height BB→saddle (mm)", 600.0, 900.0, 750.0, step=1.0)
 kops_status = st.sidebar.selectbox("KOPS status", ["Neutraal", "Forward", "Back"])
-
-# --- Pedalen ---
-st.sidebar.subheader("Pedaal type")
-pedal_type = st.sidebar.selectbox("Selecteer pedaal", 
-    ["Shimano SPD-SL", "Shimano SPD", "Look Keo", "Look Keo Blade", 
-     "Speedplay Zero/Nano", "Time ATAC", "Crankbrothers Eggbeater"]
-)
-
-# Stack hoogte per pedaal
-pedal_stack_dict = {
-    "Shimano SPD-SL": 12.5,
-    "Shimano SPD": 7.0,
-    "Look Keo": 12.0,
-    "Look Keo Blade": 13.0,
-    "Speedplay Zero/Nano": 5.5,
-    "Time ATAC": 9.5,
-    "Crankbrothers Eggbeater": 8.0
-}
-
-shoe_stack = pedal_stack_dict[pedal_type]
-
-st.write(f"📏 Stack hoogte van gekozen pedaal ({pedal_type}): {shoe_stack} mm")
+shoe_stack = st.sidebar.number_input("Shoe–pedal stack (mm)", 0.0, 25.0, 8.5, step=0.5)
 
 # --- Binnenbeenlengte methodes ---
-conservatief = inseam * 0.200
-neutraal = inseam * 0.205
-kracht = inseam * 0.210
+conservatief = inseam * 2
+neutraal = inseam * 2.02
+kracht = inseam * 2.05
 
 st.subheader("1️⃣ Binnenbeenlengte richtlijnen")
 st.write(f"- Conservatief: {conservatief:.1f} mm → korte, cadansvriendelijke crank")
@@ -60,7 +39,7 @@ elif current_crank > kracht:
 else:
     st.info("Huidige crank ligt in veilige middenrange")
 
-# --- Cadansprofiel ---
+# --- Cadansprofiel analyse ---
 st.subheader("2️⃣ Cadansprofiel interpretatie")
 if cadence < 85:
     st.write("Threshold cadans krachtgeoriënteerd → langere crank vaak gunstig")
@@ -109,22 +88,26 @@ st.subheader("6️⃣ Saddle height & KOPS")
 st.write(f"- Saddle height: {saddle_height} mm (pas aan bij extreme cranklengtes)")
 st.write(f"- KOPS status: {kops_status}")
 
+# --- Shoe-pedal stack ---
+st.subheader("7️⃣ Shoe–pedal stack")
+if shoe_stack > 15:
+    st.write("Hoge stack → comfort kan beperkt zijn bij lange cranks")
+else:
+    st.write("Stack laag → vrijheid om langere cranks te gebruiken")
+
 # --- Wetenschappelijke optimalisatie ---
 st.subheader("📊 Wetenschappelijke optimalisatie")
 crank_lengths = np.arange(150.0, 181.0, 2.5)
-torque = power / (2 * np.pi * cadence / 60.0)
-# Pas stackhoogte aan voor effectieve crank
-effective_crank_lengths = crank_lengths + shoe_stack
-force = torque / (effective_crank_lengths / 1000.0)
-efficiency = np.exp(-0.01 * (effective_crank_lengths - 170.0)**2)
+torque = float(power) / (2 * np.pi * float(cadence) / 60.0)
+force = torque / (crank_lengths / 1000.0)
+efficiency = np.exp(-0.01 * (crank_lengths - 170.0)**2)
 score = force * efficiency
 
-# Optimalisatie functie
+# Optimalisatie
 def objective(crank):
-    crank_eff = crank + shoe_stack
-    torque = power / (2 * np.pi * cadence / 60.0)
-    force = torque / (crank_eff / 1000.0)
-    eff = np.exp(-0.01 * (crank_eff - 170.0)**2)
+    torque = float(power) / (2 * np.pi * float(cadence) / 60.0)
+    force = torque / (crank / 1000.0)
+    eff = np.exp(-0.01 * (crank - 170.0)**2)
     return -force * eff
 
 opt_result = minimize(objective, 170.0, bounds=[(150.0, 180.0)])
@@ -132,10 +115,10 @@ optimal_crank = opt_result.x[0]
 
 # --- Visualisatie ---
 fig, ax = plt.subplots(figsize=(8,5))
-ax.plot(effective_crank_lengths, score, label="Force x Efficiëntie")
-ax.axvline(optimal_crank + shoe_stack, color='r', linestyle='--', label=f'Optimaal: {optimal_crank:.1f} mm (excl. stack)')
-ax.scatter(current_crank + shoe_stack, torque/( (current_crank + shoe_stack)/1000.0)*np.exp(-0.01*((current_crank + shoe_stack)-170.0)**2), color='g', label="Huidige crank")
-ax.set_xlabel("Effectieve cranklengte (mm)")
+ax.plot(crank_lengths, score, label="Force x Efficiëntie")
+ax.axvline(optimal_crank, color='r', linestyle='--', label=f'Optimaal: {optimal_crank:.1f} mm')
+ax.scatter(current_crank, torque/(current_crank/1000.0)*np.exp(-0.01*(current_crank-170.0)**2), color='g', label="Huidige crank")
+ax.set_xlabel("Cranklengte (mm)")
 ax.set_ylabel("Force x Efficiëntie")
 ax.legend()
 st.pyplot(fig)
@@ -144,6 +127,5 @@ st.pyplot(fig)
 st.subheader("✅ Aanbevolen cranklengtes")
 st.write(f"- Graeme Obree methode: {height*0.95:.1f} mm")
 st.write(f"- 'Machine' methode: {1.25*inseam+65:.1f} mm")
-st.write(f"- Wetenschappelijke optimalisatie: {optimal_crank:.1f} mm (excl. stack)")
+st.write(f"- Wetenschappelijke optimalisatie: {optimal_crank:.1f} mm")
 st.write(f"- Huidige crank: {current_crank} mm")
-st.write(f"- Effectieve crank incl. stack: {current_crank + shoe_stack:.1f} mm")
