@@ -21,29 +21,6 @@ discipline = st.sidebar.selectbox("Discipline / Bike type", ["Road", "TT/Track",
 saddle_height = st.sidebar.number_input("Saddle height BB→saddle (mm)", 600.0, 900.0, 750.0, step=1.0)
 kops_status = st.sidebar.selectbox("KOPS status", ["Neutraal", "Forward", "Back"])
 
-# --- Pedalen / stack hoogte ---
-st.sidebar.subheader("Pedaal type & stack hoogte")
-pedal_type = st.sidebar.selectbox(
-    "Selecteer pedaal", 
-    ["Shimano SPD-SL", "Shimano SPD", "Look Keo", "Look Keo Blade", 
-     "Speedplay Zero/Nano", "Time ATAC", "Crankbrothers Eggbeater"]
-)
-
-# Stack hoogte per pedaal (mm)
-pedal_stack_dict = {
-    "Shimano SPD-SL": 12.5,
-    "Shimano SPD": 7.0,
-    "Look Keo": 12.0,
-    "Look Keo Blade": 13.0,
-    "Speedplay Zero/Nano": 5.5,
-    "Time ATAC": 9.5,
-    "Crankbrothers Eggbeater": 8.0
-}
-
-shoe_stack = pedal_stack_dict[pedal_type]
-
-st.write(f"📏 Stack hoogte van gekozen pedaal ({pedal_type}): {shoe_stack} mm")
-
 # --- Binnenbeenlengte methodes ---
 conservatief = inseam * 2
 neutraal = inseam * 2.02
@@ -110,8 +87,30 @@ st.subheader("6️⃣ Saddle height & KOPS")
 st.write(f"- Saddle height: {saddle_height} mm (pas aan bij extreme cranklengtes)")
 st.write(f"- KOPS status: {kops_status}")
 
+# --- Pedalen / stack hoogte ---
+st.sidebar.subheader("Pedaal type & stack hoogte")
+pedal_type = st.sidebar.selectbox(
+    "Selecteer pedaal", 
+    ["Shimano SPD-SL", "Shimano SPD", "Look Keo", "Look Keo Blade", 
+     "Speedplay Zero/Nano", "Time ATAC", "Crankbrothers Eggbeater"]
+)
+
+# Stack hoogte per pedaal (mm)
+pedal_stack_dict = {
+    "Shimano SPD-SL": 12.5,
+    "Shimano SPD": 7.0,
+    "Look Keo": 12.0,
+    "Look Keo Blade": 13.0,
+    "Speedplay Zero/Nano": 5.5,
+    "Time ATAC": 9.5,
+    "Crankbrothers Eggbeater": 8.0
+}
+
+shoe_stack = pedal_stack_dict[pedal_type]
+
 # --- Shoe-pedal stack ---
 st.subheader("7️⃣ Shoe–pedal stack")
+st.write(f"📏 Stack hoogte van gekozen pedaal ({pedal_type}): {shoe_stack} mm")
 if shoe_stack > 15:
     st.write("Hoge stack → comfort kan beperkt zijn bij lange cranks")
 else:
